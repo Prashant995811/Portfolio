@@ -21,7 +21,7 @@ window.PORTFOLIO_CONFIG = {
     href: "Resume/Prashant_Sharma_RPA_Developer_Resume.pdf"
   },
   stats: [
-    { label: "Bots Delivered", value: "12+" },
+    { label: "Bots Delivered", value: "20+" },
     { label: "Process Accuracy", value: "98%" },
     { label: "Document Workflows", value: "25K+" },
     { label: "Reporting SLA", value: "< 5 min" }
