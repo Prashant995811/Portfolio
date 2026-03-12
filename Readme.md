@@ -8,7 +8,7 @@ A polished, config-driven portfolio dashboard for showcasing RPA, AI automation,
 - Config-based content management through `config.js`
 - Dynamic stats, network nodes, projects, logs, and contact details
 - Skills radar chart powered by Chart.js
-- Contact form that opens a prefilled email draft
+- Contact form submitted through Formspree with inline feedback
 
 ## Project Structure
 
@@ -27,19 +27,10 @@ Portfolio/
 - `styles.css` contains the visual design and responsive behavior
 - `app.js` renders the page dynamically from config values
 - `config.js` is the single place to update content, links, metrics, and logs
+## Form Setup
 
-## Recommended Next Step
+The contact form is configured to submit to Formspree using the endpoint stored in `config.js`.
 
-For a production contact form, replace the current `mailto:` flow with one of these:
+If you want to change the inbox target later, update:
 
-- Formspree or Getform for a quick no-backend form endpoint
-- Netlify Forms if the site is deployed on Netlify
-- A serverless function if you want validation, spam protection, and database storage
-
-If you later want a real data file instead of `config.js`, the best approach is:
-
-1. Move content into `config.json`
-2. Serve the site through a local or hosted web server
-3. Fetch the JSON in `app.js`
-
-This is more scalable than loading JSON from `file://`, which is unreliable in browsers.
+- `forms.endpoint` in `config.js`

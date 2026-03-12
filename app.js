@@ -33,7 +33,18 @@
 
     const brand = document.querySelector(".brand");
     if (brand) {
-      brand.textContent = config.site.title;
+      brand.textContent = "";
+      const brandText = createNode("span", "brand-text");
+
+      [...config.site.title].forEach((char) => {
+        const charSpan = createNode("span", "brand-char", char);
+        if (char === " ") {
+          charSpan.innerHTML = "&nbsp;";
+        }
+        brandText.append(charSpan);
+      });
+
+      brand.append(brandText);
     }
 
     const resumeLink = document.getElementById("resumeLink");
@@ -206,6 +217,174 @@
     });
   };
 
+  const setupScrollTopButton = () => {
+    const button = document.getElementById("scrollTopButton");
+    if (!button) {
+      return;
+    }
+
+    const toggleVisibility = () => {
+      if (window.scrollY > 320) {
+        button.classList.add("is-visible");
+      } else {
+        button.classList.remove("is-visible");
+      }
+    };
+
+    button.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    window.addEventListener("scroll", toggleVisibility, { passive: true });
+    toggleVisibility();
+  };
+
+  const setupParticles = () => {
+    if (typeof window.particlesJS !== "function") {
+      return;
+    }
+
+    window.particlesJS("particles-js", {
+      particles: {
+        number: {
+          value: 72,
+          density: {
+            enable: true,
+            value_area: 900
+          }
+        },
+        color: {
+          value: ["#69e2ff", "#31c2ff", "#89f7b1"]
+        },
+        shape: {
+          type: "circle"
+        },
+        opacity: {
+          value: 0.35,
+          random: true
+        },
+        size: {
+          value: 3,
+          random: true
+        },
+        line_linked: {
+          enable: true,
+          distance: 130,
+          color: "#69e2ff",
+          opacity: 0.18,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 1.4,
+          direction: "none",
+          random: false,
+          straight: false,
+          out_mode: "out",
+          bounce: false
+        }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: {
+            enable: true,
+            mode: "grab"
+          },
+          onclick: {
+            enable: true,
+            mode: "push"
+          },
+          resize: true
+        },
+        modes: {
+          grab: {
+            distance: 180,
+            line_linked: {
+              opacity: 0.5
+            }
+          },
+          push: {
+            particles_nb: 3
+          }
+        }
+      },
+      retina_detect: true
+    });
+  };
+
+  const setupNetworkHover = () => {
+    document.querySelectorAll(".network-node").forEach((node) => {
+      node.addEventListener("mousemove", (event) => {
+        const rect = node.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+        node.style.setProperty("--glow-x", `${x}%`);
+        node.style.setProperty("--glow-y", `${y}%`);
+      });
+
+      node.addEventListener("mouseleave", () => {
+        node.style.removeProperty("--glow-x");
+        node.style.removeProperty("--glow-y");
+      });
+    });
+  };
+
+  const setupInteractiveGlow = () => {
+    document
+      .querySelectorAll(".panel, .stat-card, .project-card, .meta-item")
+      .forEach((card) => {
+        card.addEventListener("mousemove", (event) => {
+          const rect = card.getBoundingClientRect();
+          const x = ((event.clientX - rect.left) / rect.width) * 100;
+          const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+          card.style.setProperty("--glow-x", `${x}%`);
+          card.style.setProperty("--glow-y", `${y}%`);
+        });
+
+        card.addEventListener("mouseleave", () => {
+          card.style.removeProperty("--glow-x");
+          card.style.removeProperty("--glow-y");
+        });
+      });
+  };
+
+  const setupBrandInteraction = () => {
+    const brand = document.querySelector(".brand");
+    if (!brand) {
+      return;
+    }
+
+    const chars = Array.from(brand.querySelectorAll(".brand-char"));
+
+    brand.addEventListener("mousemove", (event) => {
+      const rect = brand.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+      brand.style.setProperty("--brand-glow-x", `${x}%`);
+      brand.style.setProperty("--brand-glow-y", `${y}%`);
+
+      chars.forEach((char) => {
+        const charRect = char.getBoundingClientRect();
+        const charCenterX = charRect.left + charRect.width / 2;
+        const distance = Math.abs(event.clientX - charCenterX);
+        const influence = Math.max(0, 1 - distance / 90);
+        char.style.transform = `translateY(${-5 * influence}px)`;
+        char.style.opacity = `${0.82 + influence * 0.18}`;
+      });
+    });
+
+    brand.addEventListener("mouseleave", () => {
+      chars.forEach((char) => {
+        char.style.transform = "";
+        char.style.opacity = "";
+      });
+    });
+  };
+
   const setupForm = () => {
     const form = document.getElementById("contactForm");
     const status = document.getElementById("formStatus");
@@ -273,21 +452,23 @@
       try {
         const response = await fetch(form.action, {
           method: "POST",
-          body: formData,
           headers: {
             Accept: "application/json"
-          }
+          },
+          body: formData
         });
 
+        const result = await response.json().catch(() => ({}));
+
         if (!response.ok) {
-          throw new Error("Form submission failed.");
+          throw new Error(result.error || "Form submission failed.");
         }
 
         status.textContent = "Message sent successfully. It has been delivered to the inbox.";
         form.reset();
         openModal();
       } catch (error) {
-        status.textContent = "Message could not be sent right now. Please try again in a moment.";
+        status.textContent = error.message || "Message could not be sent right now. Please try again in a moment.";
       }
     });
 
@@ -300,7 +481,12 @@
   renderProjects();
   renderContactMeta();
   renderChart();
+  setupParticles();
+  setupNetworkHover();
+  setupInteractiveGlow();
+  setupBrandInteraction();
   setupScrollButtons();
+  setupScrollTopButton();
   setupForm();
   animateLog("bootLog", config.bootMessages, 700);
   animateLog("botLog", config.botMessages, 900);
