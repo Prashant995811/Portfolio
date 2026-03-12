@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Automation portfolio for Prashant Sharma, showcasing RPA, AI, and enterprise automation projects.">
+  <title>Automation Control Center | Prashant Sharma</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="page-shell">
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <header class="hero" id="top">
+      <nav class="topbar">
+        <a class="brand" href="#top">Automation Control Center</a>
+        <div class="nav-links">
+          <button type="button" data-scroll-target="overview">Overview</button>
+          <button type="button" data-scroll-target="projects">Projects</button>
+          <button type="button" data-scroll-target="contact">Contact</button>
+        </div>
+      </nav>
+
+      <section class="hero-panel">
+        <div class="hero-copy">
+          <p class="eyebrow" id="heroEyebrow"></p>
+          <h1 id="heroTitle"></h1>
+          <p class="hero-subtitle" id="heroSubtitle"></p>
+          <div class="hero-actions">
+            <a class="button primary" id="resumeLink" target="_blank" rel="noopener">View Resume</a>
+            <button type="button" class="button secondary" data-scroll-target="contact">Start a Conversation</button>
+          </div>
+        </div>
+
+        <aside class="status-card">
+          <div class="status-header">
+            <span class="status-dot"></span>
+            <span id="statusLabel"></span>
+          </div>
+          <div class="status-grid" id="statsGrid"></div>
+        </aside>
+      </section>
+    </header>
+
+    <main>
+      <section class="section" id="overview">
+        <div class="section-heading">
+          <p class="section-kicker">Command Overview</p>
+          <h2>Live automation intelligence with cleaner signal</h2>
+        </div>
+
+        <div class="overview-grid">
+          <article class="panel">
+            <div class="panel-header">
+              <h3>System Boot Console</h3>
+              <span class="panel-tag">Init Sequence</span>
+            </div>
+            <div class="log-window" id="bootLog" aria-live="polite"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <h3>Bot Activity Monitor</h3>
+              <span class="panel-tag">Execution Feed</span>
+            </div>
+            <div class="log-window" id="botLog" aria-live="polite"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="section-kicker">Topology</p>
+          <h2>Automation network architecture</h2>
+        </div>
+        <div class="network-grid" id="networkGrid"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <p class="section-kicker">Capability Map</p>
+          <h2>Skills radar driven from config</h2>
+        </div>
+        <article class="panel chart-panel">
+          <canvas id="skillsChart" aria-label="Automation skills radar chart"></canvas>
+        </article>
+      </section>
+
+      <section class="section" id="projects">
+        <div class="section-heading">
+          <p class="section-kicker">Delivery Modules</p>
+          <h2>Selected automation programs</h2>
+        </div>
+        <div class="project-grid" id="projectGrid"></div>
+      </section>
+
+      <section class="section" id="contact">
+        <div class="section-heading">
+          <p class="section-kicker">Transmission</p>
+          <h2>Reach out with project context</h2>
+        </div>
+
+        <div class="contact-layout">
+          <article class="panel contact-panel">
+            <form id="contactForm" method="POST" novalidate>
+              <label>
+                <span>Name</span>
+                <input type="text" name="name" placeholder="Your name" required>
+              </label>
+
+              <label>
+                <span>Your email</span>
+                <input type="email" name="email" placeholder="you@example.com" required>
+              </label>
+
+              <label>
+                <span>Your message</span>
+                <textarea name="message" placeholder="Tell me about the automation challenge you want to solve." required></textarea>
+              </label>
+
+              <input type="hidden" name="_subject" value="New portfolio inquiry">
+
+              <button class="button primary form-submit" type="submit">Send Message</button>
+              <p class="form-status" id="formStatus"></p>
+            </form>
+          </article>
+
+          <article class="panel contact-panel">
+            <h3>Contact Channel</h3>
+            <div class="contact-meta" id="contactMeta"></div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p id="footerText"></p>
+    </footer>
+  </div>
+
+  <div class="modal-backdrop" id="successModal" hidden>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="successModalTitle">
+      <div class="modal-badge">Transmission Confirmed</div>
+      <h3 id="successModalTitle"></h3>
+      <p id="successModalMessage"></p>
+      <div class="modal-actions">
+        <button type="button" class="button primary" id="closeSuccessModal">Close</button>
+        <!-- <button type="button" class="button secondary" data-scroll-target="contact">View Contact Details</button> -->
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
